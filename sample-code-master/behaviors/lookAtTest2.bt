@@ -1,0 +1,436 @@
+{
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "",
+        "options": {},
+        "children": [
+            "9c8b70a8-6087-4b07-a441-fa49f5bfd22e",
+            "a4e76867-6c04-4d87-a33a-904a29ce110c",
+            "5401ec49-0ead-4a35-b228-7cf1c5592ba3",
+            "61811f8a-ba1c-495b-a34f-74e7846921b2",
+            "78555d8f-0443-407e-88a9-1c9d35bf26a0",
+            "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f"
+        ],
+        "decorators": [
+            "e41538f1-c858-433e-82bd-77f29955f096"
+        ]
+    },
+    "meta": {
+        "version": 1
+    },
+    "9c8b70a8-6087-4b07-a441-fa49f5bfd22e": {
+        "id": "9c8b70a8-6087-4b07-a441-fa49f5bfd22e",
+        "class": "LookAt",
+        "name": "",
+        "options": {
+            "getTarget": [
+                "() => {",
+                "    console.log(\"gettarget\");",
+                "    let entity = jibo.lps.getClosestVisualEntity();",
+                "    notepad.foundFace = false;",
+                "    let position = {x: 1, y: 0, z: 1}",
+                "    if (entity) {",
+                "    //we want to be done after we go there!  ",
+                "        position = {x: entity.position.x, y: entity.position.y, z: entity.position.z};",
+                "        notepad.toMoveTo = position;",
+                "        notepad.foundFace = true;",
+                "    }",
+                "    //otherwise just chill",
+                "    return position;",
+                "}"
+            ],
+            "isContinuous": false,
+            "config": [
+                "(lookAt) => {",
+                "      console.log(\"lookat\");",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1,
+        "decorators": [
+            "8e738967-0033-4043-ac9d-cd0819bec5d6"
+        ]
+    },
+    "a4e76867-6c04-4d87-a33a-904a29ce110c": {
+        "id": "a4e76867-6c04-4d87-a33a-904a29ce110c",
+        "class": "PlayAnimation",
+        "name": "",
+        "options": {
+            "animPath": "greeting-with-event.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "8e738967-0033-4043-ac9d-cd0819bec5d6": {
+        "id": "8e738967-0033-4043-ac9d-cd0819bec5d6",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  ",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return (notepad.foundFace !== true);",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "5401ec49-0ead-4a35-b228-7cf1c5592ba3": {
+        "id": "5401ec49-0ead-4a35-b228-7cf1c5592ba3",
+        "class": "TakePhoto",
+        "name": "",
+        "options": {
+            "resolution": 2,
+            "onPhoto": [
+                "(error, imageUrl) => {",
+                "  notepad.imageUrl = imageUrl;",
+                "}"
+            ],
+            "noDistortion": true
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "61811f8a-ba1c-495b-a34f-74e7846921b2": {
+        "id": "61811f8a-ba1c-495b-a34f-74e7846921b2",
+        "class": "ExecuteScript",
+        "name": "",
+        "options": {
+            "exec": [
+                "() => {",
+                "  //redraw every frame",
+                "  jibo.face.renderOnlyWhenDirty = false; ",
+                "  ",
+                "  // create new Pixi sprite",
+                "  notepad.photo = new PIXI.Sprite();",
+                "  ",
+                "  // set the texture of the sprite to the imageURL",
+                "  notepad.photo.texture = PIXI.Texture.fromImage(notepad.imageUrl);",
+                "  ",
+                "  //Emotion API return data",
+                "  var fs = require('fs');",
+                "  var request = require('request');",
+                "  //Creates file from taken picture",
+                "  var dateString = './face' + new Date().getTime();",
+                "  request.get({url: notepad.imageUrl, encoding: 'binary'}, function (err, response, body) {",
+                "    fs.writeFile(dateString + \".jpg\", body, 'binary', function(err) {",
+                "      if(err) {",
+                "        console.log(err);",
+                "      }",
+                "      else {",
+                "        console.log(\"The file was saved!\");",
+                "      }",
+                "    }); ",
+                "  });",
+                "  ",
+                "  var oxfordEmotion = require(\"node-oxford-emotion\")(\"3e43fabb36c940eaaa66b84ab5840869\");",
+                "  var bitmap = fs.readFileSync(\"dateString\" + \".jpg\");",
+                "  console.log('bitmap', bitmap);",
+                "  var bf = new Buffer(bitmap.toString('binary'),'binary');",
+                "  console.log('buffer', bf):",
+                "  var emotion = oxfordEmotion.recognize(\"image\", bf, function(cb) {",
+                "    var data = JSON.parse(cb);",
+                "    var firstFaceEmotions = data[0]['scores'];",
+                "    var mostApparentEmotion = \"anger\";",
+                "    var mostApparentEmotionCertainty = 0;",
+                "    for (var emotion in firstFaceEmotions){",
+                "      if (firstFaceEmotions.hasOwnProperty(emotion)) {",
+                "           if (firstFaceEmotions[emotion] > mostApparentEmotionCertainty) {",
+                "              mostApparentEmotion = emotion;",
+                "              mostApparentEmotionCertainty = firstFaceEmotions[emotion];",
+                "           }",
+                "      }",
+                "    }",
+                "    notepad.mostApparentEmotion = mostApparentEmotion;",
+                "    notepad.mostApparenteEmotionCertainty = mostApparentEmotionCertainty;",
+                "    console.log('most apparent emotion', mostApparentEmotion);",
+                "    console.log('certainty', mostApparentEmotionCertainty);",
+                "  ",
+                "    //now set jibo.face.values or whatever and set values to dirty and update",
+                "    ",
+                "    // set the texture of the sprite to the imageURL",
+                "    //notepad.photo.texture = PIXI.Texture.fromImage(notepad.imageUrl);",
+                "      ",
+                "    // add the sprite to the stage",
+                "    //jibo.face.stage.addChild(notepad.photo);",
+                "  });",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1,
+        "decorators": []
+    },
+    "78555d8f-0443-407e-88a9-1c9d35bf26a0": {
+        "id": "78555d8f-0443-407e-88a9-1c9d35bf26a0",
+        "class": "TimeoutJs",
+        "name": "pause with photo on screen for 10 seconds",
+        "options": {
+            "getTime": [
+                "() => {",
+                "    return 1000;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f": {
+        "id": "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f",
+        "class": "Switch",
+        "name": "",
+        "options": {},
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            "3a434195-183d-4c0b-a0db-89b272016ea0",
+            "380dd37c-8cf1-433d-82fd-0b34a460cef6",
+            "37a717a1-7b6c-4f76-b446-640985a6562c"
+        ],
+        "decorators": [
+            "6b51eaf6-3517-4899-a2cc-60a1c7320d50"
+        ]
+    },
+    "6b51eaf6-3517-4899-a2cc-60a1c7320d50": {
+        "id": "6b51eaf6-3517-4899-a2cc-60a1c7320d50",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.loopCount = 0;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    notepad.loopCount = notepad.loopCount + 1;",
+                "    if (notepad.loopCount % 5 == 4) {",
+                "        return false;",
+                "    }",
+                "    else {",
+                "      return true;",
+                "    }",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "3a434195-183d-4c0b-a0db-89b272016ea0": {
+        "id": "3a434195-183d-4c0b-a0db-89b272016ea0",
+        "class": "Sequence",
+        "name": "sad",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f",
+        "children": [
+            "86a1c504-ebe7-4994-8c90-1408cc5cbd64"
+        ],
+        "decorators": [
+            "8349d41e-029e-44b1-bd36-8950388239cd"
+        ]
+    },
+    "380dd37c-8cf1-433d-82fd-0b34a460cef6": {
+        "id": "380dd37c-8cf1-433d-82fd-0b34a460cef6",
+        "class": "Sequence",
+        "name": "neutral",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f",
+        "children": [
+            "d18c9328-9276-45b7-87a7-fc6ca08cc577"
+        ],
+        "decorators": [
+            "0f627851-ab5f-46c1-b109-1f495f6354cb"
+        ]
+    },
+    "37a717a1-7b6c-4f76-b446-640985a6562c": {
+        "id": "37a717a1-7b6c-4f76-b446-640985a6562c",
+        "class": "Sequence",
+        "name": "happy",
+        "options": {},
+        "asset-pack": "core",
+        "parent": "ddc875b7-6524-4bb0-9a11-a26fe2ccec0f",
+        "decorators": [
+            "f0e2de7c-2734-4aa8-8db0-9058f0d31989"
+        ],
+        "children": [
+            "bc419103-022f-4b49-a559-5b5f3af5907f",
+            "a1683e66-f890-447f-907b-3f60f1d6636e",
+            "31aa3f5b-c374-4180-bf71-5693ecfeb37c"
+        ]
+    },
+    "8349d41e-029e-44b1-bd36-8950388239cd": {
+        "id": "8349d41e-029e-44b1-bd36-8950388239cd",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  if (notepad.mostApparentEmotion !== \"sadness\") {",
+                "    return false;",
+                "  }",
+                "  else {",
+                "    return true;",
+                "  }",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "0f627851-ab5f-46c1-b109-1f495f6354cb": {
+        "id": "0f627851-ab5f-46c1-b109-1f495f6354cb",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  ",
+                "    if (notepad.mostApparentEmotion !== \"neutral\") {",
+                "      return false;",
+                "    }",
+                "    else {",
+                "      return true;",
+                "    }",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "f0e2de7c-2734-4aa8-8db0-9058f0d31989": {
+        "id": "f0e2de7c-2734-4aa8-8db0-9058f0d31989",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  console.log(notepad);",
+                "  console.log(notepad.mostApparentEmotion);",
+                "  console.log(notepad.mostApparentEmotion == \"happiness\");",
+                "  if (notepad.mostApparentEmotion != \"happiness\") {",
+                "    return false;",
+                "  }",
+                "  else {",
+                "    return true;",
+                "  }",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "86a1c504-ebe7-4994-8c90-1408cc5cbd64": {
+        "id": "86a1c504-ebe7-4994-8c90-1408cc5cbd64",
+        "class": "Subtree",
+        "name": "",
+        "options": {
+            "behaviorPath": "24-sad.bt",
+            "getNotepad": [
+                "() => {",
+                "  console.log(\"sad case\");",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "3a434195-183d-4c0b-a0db-89b272016ea0"
+    },
+    "d18c9328-9276-45b7-87a7-fc6ca08cc577": {
+        "id": "d18c9328-9276-45b7-87a7-fc6ca08cc577",
+        "class": "Subtree",
+        "name": "",
+        "options": {
+            "behaviorPath": "23-neutral.bt",
+            "getNotepad": [
+                "() => {",
+                "  console.log(\"neutral case\");",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "380dd37c-8cf1-433d-82fd-0b34a460cef6"
+    },
+    "31aa3f5b-c374-4180-bf71-5693ecfeb37c": {
+        "id": "31aa3f5b-c374-4180-bf71-5693ecfeb37c",
+        "class": "Subtree",
+        "name": "",
+        "options": {
+            "behaviorPath": "25-happy.bt",
+            "getNotepad": [
+                "() => {",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "37a717a1-7b6c-4f76-b446-640985a6562c"
+    },
+    "bc419103-022f-4b49-a559-5b5f3af5907f": {
+        "id": "bc419103-022f-4b49-a559-5b5f3af5907f",
+        "class": "TimeoutJs",
+        "asset-pack": "core",
+        "parent": "37a717a1-7b6c-4f76-b446-640985a6562c",
+        "name": "Pause for a bit",
+        "options": {
+            "getTime": [
+                "() => {",
+                "  console.log('in happy loop');",
+                "   return 1000 + 2000 * Math.random();",
+                "}"
+            ]
+        }
+    },
+    "a1683e66-f890-447f-907b-3f60f1d6636e": {
+        "id": "a1683e66-f890-447f-907b-3f60f1d6636e",
+        "class": "PlayAnimation",
+        "name": "play excited",
+        "options": {
+            "animPath": "excited.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "37a717a1-7b6c-4f76-b446-640985a6562c"
+    },
+    "e41538f1-c858-433e-82bd-77f29955f096": {
+        "id": "e41538f1-c858-433e-82bd-77f29955f096",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "      notepad.foundFace = false;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    }
+}

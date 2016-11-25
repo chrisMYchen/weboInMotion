@@ -1,0 +1,254 @@
+{
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "",
+        "children": [
+            2,
+            6
+        ],
+        "decorators": [
+            5
+        ],
+        "options": {}
+    },
+    "2": {
+        "id": 2,
+        "class": "Subtree",
+        "name": "Watch target until \"Hey Jibo\"",
+        "asset-pack": "core",
+        "parent": 1,
+        "decorators": [
+            3
+        ],
+        "options": {
+            "behaviorPath": "19-lps.bt",
+            "getNotepad": [
+                "() => {",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        }
+    },
+    "3": {
+        "id": 3,
+        "class": "SucceedOnEmbedded",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "rule": "hey_jibo",
+            "onResult": [
+                "(listener) => {",
+                "\tlistener.on('hey-jibo', (asrResult, speakerIds) => {",
+                "",
+                "\t});",
+                "}"
+            ]
+        }
+    },
+    "4": {
+        "id": 4,
+        "class": "PlayAnimation",
+        "name": "Play excited animation",
+        "asset-pack": "core",
+        "parent": 137,
+        "options": {
+            "animPath": "excited.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "5": {
+        "id": 5,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return true;",
+                "}"
+            ]
+        }
+    },
+    "6": {
+        "id": 6,
+        "class": "Parallel",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            136,
+            137,
+            8
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "7": {
+        "id": 7,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_01.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_01.mp3"
+        }
+    },
+    "8": {
+        "id": 8,
+        "class": "Random",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 6,
+        "children": [
+            7,
+            9,
+            11,
+            15,
+            23,
+            39,
+            71
+        ],
+        "options": {}
+    },
+    "9": {
+        "id": 9,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_02.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_02.mp3"
+        }
+    },
+    "11": {
+        "id": 11,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_03.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_03.mp3"
+        }
+    },
+    "15": {
+        "id": 15,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_04.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_04.mp3"
+        }
+    },
+    "23": {
+        "id": 23,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_05.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_05.mp3"
+        }
+    },
+    "39": {
+        "id": 39,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_06.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_06.mp3"
+        }
+    },
+    "71": {
+        "id": 71,
+        "class": "PlayAudio",
+        "name": "FX_SeeYou_07.mp3",
+        "asset-pack": "core",
+        "parent": 8,
+        "options": {
+            "audioPath": "FX_SeeYou_07.mp3"
+        }
+    },
+    "136": {
+        "id": 136,
+        "class": "TextToSpeechJs",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 6,
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    let responses = [",
+                "      \"Hey there. I see you.\",",
+                "      \"Whats up?\",",
+                "      \"Hi there.\" ",
+                "    ];",
+                "    let index = Math.round(Math.random() * (responses.length - 1));",
+                "    callback(responses[index]);",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        }
+    },
+    "137": {
+        "id": 137,
+        "class": "Random",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 6,
+        "children": [
+            4,
+            138,
+            272
+        ],
+        "options": {}
+    },
+    "138": {
+        "id": 138,
+        "class": "PlayAnimation",
+        "name": "Play dance",
+        "asset-pack": "core",
+        "parent": 137,
+        "options": {
+            "animPath": "dance.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "272": {
+        "id": 272,
+        "class": "PlayAnimation",
+        "name": "Play greetings",
+        "asset-pack": "core",
+        "parent": 137,
+        "options": {
+            "animPath": "greeting.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "meta": {
+        "version": 1
+    }
+}

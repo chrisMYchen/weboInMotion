@@ -1,0 +1,22 @@
+{
+  "name": "sample-code",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "array-from": "^2.0.2",
+    "behaviorify": "^1.0.0",
+    "jibo": "^3.0.0",
+    "node-oxford-emotion": "^1.0.4",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "download-image": "^1.0.1",
+    "file-system": "^2.2.2"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

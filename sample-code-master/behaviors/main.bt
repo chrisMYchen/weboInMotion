@@ -1,0 +1,33 @@
+{
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "",
+        "options": {},
+        "children": [
+            "0d45ff37-4aa1-487d-9499-6d74f161eaff"
+        ]
+    },
+    "meta": {
+        "version": 1
+    },
+    "0d45ff37-4aa1-487d-9499-6d74f161eaff": {
+        "id": "0d45ff37-4aa1-487d-9499-6d74f161eaff",
+        "class": "Subtree",
+        "name": "",
+        "options": {
+            "behaviorPath": "lps-visual-entity.bt",
+            "getNotepad": [
+                "() => {",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    }
+}

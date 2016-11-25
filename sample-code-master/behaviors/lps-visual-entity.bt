@@ -1,0 +1,208 @@
+{
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "",
+        "options": {},
+        "decorators": [
+            "8330d96e-e4a0-4861-b6f6-bd390153cb73"
+        ],
+        "children": [
+            "f66414ed-dcd6-4cfc-945e-4eed336083f8",
+            "c233f073-0c30-4cc0-ac70-8df8add10ce2",
+            "252f80c9-ab2d-4b67-b99b-e0f83ca978c0"
+        ]
+    },
+    "meta": {
+        "version": 1
+    },
+    "8330d96e-e4a0-4861-b6f6-bd390153cb73": {
+        "id": "8330d96e-e4a0-4861-b6f6-bd390153cb73",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.visualEntity = undefined;",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "f66414ed-dcd6-4cfc-945e-4eed336083f8": {
+        "id": "f66414ed-dcd6-4cfc-945e-4eed336083f8",
+        "class": "TimeoutJs",
+        "name": "",
+        "options": {
+            "getTime": [
+                "() => {",
+                "  var jibo = require(\"jibo\");",
+                "  var lps = jibo.lps;",
+                "  var entity = lps.getClosestVisualEntity();",
+                "  var confidence, description;",
+                "  if (!notepad.visualEntity && entity) {",
+                "    confidence = entity.confidence;",
+                "    description = entity.description;",
+                "    if (confidence == 1) {",
+                "      notepad.visualEntity = entity;",
+                "      console.log(entity);",
+                "    }",
+                "  }",
+                "  ",
+                "    return 200;",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1
+    },
+    "252f80c9-ab2d-4b67-b99b-e0f83ca978c0": {
+        "id": "252f80c9-ab2d-4b67-b99b-e0f83ca978c0",
+        "class": "ExecuteScriptAsync",
+        "name": "",
+        "options": {
+            "exec": [
+                "(succeed, fail) => {",
+                "  let entity = notepad.visualEntity;",
+                "  if (!!entity) {",
+                "    let jibo = require(\"jibo\");",
+                "    let animate = jibo.animate;",
+                "    let lookAtBuilder = animate.createLookatBuilder();",
+                "    let pos = entity.position;",
+                "    pos = new jibo.animate.THREE.Vector3(pos.x, pos.y, pos.z);",
+                "    pos.normalize();",
+                "    let newZ = pos.z > 0.5 ? 0.5 : (pos.z < 0.2 ? 0.2 : pos.z),",
+                "      // newX = pos.x < 0 ? pos.x : initialPos.x,",
+                "      newX = pos.x,",
+                "      // newY = Math.abs(pos.y) < 0.05 ? 0 : pos.y;",
+                "      newY = pos.y;",
+                "    lookAtBuilder.startLookat(new jibo.animate.THREE.Vector3(newX, newY, newZ));",
+                "  }",
+                "  notepad.visualEntity = undefined;",
+                "  succeed();",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 1,
+        "skipped": true
+    },
+    "c233f073-0c30-4cc0-ac70-8df8add10ce2": {
+        "id": "c233f073-0c30-4cc0-ac70-8df8add10ce2",
+        "class": "Switch",
+        "name": "",
+        "options": {},
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            "71c7784a-5e9c-4045-9dc8-25287338a095",
+            "dab85764-c056-4643-9aee-7b881a22b335"
+        ]
+    },
+    "71c7784a-5e9c-4045-9dc8-25287338a095": {
+        "id": "71c7784a-5e9c-4045-9dc8-25287338a095",
+        "class": "ExecuteScriptAsync",
+        "name": "",
+        "options": {
+            "exec": [
+                "(succeed, fail) => {",
+                "  let entity = notepad.visualEntity;",
+                "  if (!!entity && entity.description == \"motion\") {",
+                "    let jibo = require(\"jibo\");",
+                "    let animate = jibo.animate;",
+                "    let lookAtBuilder = animate.createLookatBuilder();",
+                "    let pos = entity.position;",
+                "    pos = new jibo.animate.THREE.Vector3(pos.x, pos.y, pos.z);",
+                "    pos.normalize();",
+                "    // let newZ = pos.z > 0.5 ? 0.5 : (pos.z < 0.2 ? 0.2 : pos.z),",
+                "    //   // newX = pos.x < 0 ? pos.x : initialPos.x,",
+                "    //   newX = pos.x,",
+                "    //   // newY = Math.abs(pos.y) < 0.05 ? 0 : pos.y;",
+                "    //   newY = pos.y;",
+                "    let newZ = pos.z,",
+                "      newX = pos.x,",
+                "      newY = pos.y;",
+                "    lookAtBuilder.startLookat(new jibo.animate.THREE.Vector3(newX, newY, newZ));",
+                "  }",
+                "  notepad.visualEntity = undefined;",
+                "  succeed();",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "c233f073-0c30-4cc0-ac70-8df8add10ce2",
+        "decorators": [
+            "1aada529-5f84-40c4-80c7-777adcb54aa6"
+        ]
+    },
+    "1aada529-5f84-40c4-80c7-777adcb54aa6": {
+        "id": "1aada529-5f84-40c4-80c7-777adcb54aa6",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  let entity = notepad.visualEntity;",
+                "  return entity && entity.description == \"motion\";",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "dab85764-c056-4643-9aee-7b881a22b335": {
+        "id": "dab85764-c056-4643-9aee-7b881a22b335",
+        "class": "ExecuteScriptAsync",
+        "name": "",
+        "options": {
+            "exec": [
+                "(succeed, fail) => {",
+                "  let entity = notepad.visualEntity;",
+                "  let jibo = require(\"jibo\");",
+                "  let animate = jibo.animate;",
+                "  let lookAtBuilder = animate.createLookatBuilder();",
+                "  let pos = entity.position;",
+                "  pos = new jibo.animate.THREE.Vector3(pos.x, pos.y, pos.z);",
+                "  pos.normalize();",
+                "  // let newZ = pos.z > 0.5 ? 0.5 : (pos.z < 0.2 ? 0.2 : pos.z),",
+                "  //   // newX = pos.x < 0 ? pos.x : initialPos.x,",
+                "  //   newX = pos.x,",
+                "  //   // newY = Math.abs(pos.y) < 0.05 ? 0 : pos.y;",
+                "  //   newY = pos.y;",
+                "  let newZ = pos.z,",
+                "    newX = pos.x,",
+                "    newY = pos.y;",
+                "  lookAtBuilder.startLookat(new jibo.animate.THREE.Vector3(newX, newY, newZ));",
+                "  jibo.tts.speak(\"Hello, I see you\", (err) => {",
+                "    notepad.visualEntity = undefined;",
+                "    succeed();",
+                "  });",
+                "    ",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "c233f073-0c30-4cc0-ac70-8df8add10ce2",
+        "decorators": [
+            "d68ed8f3-5354-4493-a3af-277c17edae2a"
+        ]
+    },
+    "d68ed8f3-5354-4493-a3af-277c17edae2a": {
+        "id": "d68ed8f3-5354-4493-a3af-277c17edae2a",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  let entity = notepad.visualEntity;",
+                "  return entity && entity.description == \"person\";",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    }
+}
