@@ -18,6 +18,6 @@ If the person is HAPPY, Jibo will perform an exciting greeting, giving appropria
 
 ##Dependencies
 We use the following Node.js packages aside from the packages Jibo already uses
--'fs'
--'request'
--'node-oxford-emotion'
++ 'fs'
++ 'request'
++ 'node-oxford-emotion'
