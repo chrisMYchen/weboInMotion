@@ -14,3 +14,10 @@ If the person is Neutral, Jibo will perform his basic greeting emote and a neutr
 
 ####HAPPY
 If the person is HAPPY, Jibo will perform an exciting greeting, giving appropriately enthused word responses, and emit a yellow glow.
+
+
+##Dependencies
+We use the following Node.js packages aside from the packages Jibo already uses
+-'fs'
+-'request'
+-'node-oxford-emotion'
